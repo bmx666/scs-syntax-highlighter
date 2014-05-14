@@ -1,0 +1,356 @@
+{
+
+    "repository": {
+        "hexadecimal": {
+            "comment": "handles hexadecimal numbers", 
+            "patterns": [
+                {
+                    "name": "storage.type.sii", 
+                    "match": "&\\b[0-9A-Fa-f]+\\b"
+                },
+                {
+                    "name": "constant.numeric.hexadecimal.sii", 
+                    "match": "\\b(0(x|X))?[0-9A-Fa-f]+\\b"
+                }
+            ]
+        },
+        "numeric": {
+            "comment": "handles numeric numbers", 
+            "name": "constant.numeric.sii", 
+            "match": "[+-]?\\d+([.]\\d+)?[fF]?\\b"
+        },
+        "comments": {
+            "patterns": [
+                {
+                    "end": "\\*/", 
+                    "name": "comment.block.documentation.sii", 
+                    "begin": "/\\*\\*", 
+                    "captures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.sii"
+                        }
+                    }
+                }, 
+                {
+                    "end": "\\*/", 
+                    "name": "comment.block.sii", 
+                    "begin": "/\\*", 
+                    "captures": {
+                        "0": {
+                            "name": "punctuation.definition.comment.sii"
+                        }
+                    }
+                }, 
+                {
+                    "name": "comment.line.number-sign.sii",
+                    "match": "\\s*(#).*$\\r?\\n?"
+                },
+                {
+                    "name": "comment.line.double-slash.sii",
+                    "match": "\\s*(//).*$\\r?\\n?"
+                }
+            ]
+        }, 
+        "include": {
+            "name": "meta.at-rule.include.sii", 
+            "begin": "\\s*((@)include\\b)\\s*", 
+            "end": "\\s*(?=$)", 
+            "captures": {
+                "1": {
+                    "name": "keyword.control.at-rule.include.sii"
+                }, 
+                "2": {
+                    "name": "punctuation.definition.keyword.sii"
+                }
+            }, 
+            "patterns": [
+                {
+                    "include": "#string-quoted"
+                }
+            ]
+        },
+        "constant": {
+            "name": "constant.language.sii", 
+            "match": "\\b(?:true|false|null|nil)\\b"
+        },
+        "array": {
+            "name": "meta.structure.array.sii", 
+            "begin": "\\(", 
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.array.begin.sii"
+                }
+            }, 
+            "end": "\\)", 
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.array.end.sii"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#value"
+                }, 
+                {
+                    "name": "punctuation.separator.array.sii", 
+                    "match": ","
+                }, 
+                {
+                    "name": "invalid.illegal.expected-array-separator.sii", 
+                    "match": "[^\\s\\)]"
+                }
+            ]
+        }, 
+        "string-quoted": {
+            "name": "string.quoted.double.sii",
+            "begin": "\"", 
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.begin.sii"
+                }
+            }, 
+            "end": "\"", 
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.end.sii"
+                }
+            },
+            "patterns": [
+                {
+                    "name": "constant.character.escape.sii", 
+                    "match": "(?x:                # turn on extended mode\n                     \\\\                # a literal backslash\n                     (?:               # ...followed by...\n                       [\"\\\\/bfnrt]     # one of these characters\n                       |               # ...or...\n                       u               # a u\n                       [0-9a-fA-F]{4}  # and four hex digits\n                     )\n                   )"
+                }, 
+                {
+                    "name": "invalid.illegal.unrecognized-string-escape.sii", 
+                    "match": "\\\\."
+                }
+            ]
+        }, 
+        "string-unquoted-dot": {
+            //"name": "string.unquoted.double.sii",
+            "begin": "(\\.)?([_A-Za-z][\\w_]+)(\\[(\\d*)\\])?(\\.)|(\\.)([_A-Za-z][\\w_]+)(\\[(\\d*)\\])?", 
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.begin.sii"
+                },
+                "1": {
+                    "name": "punctuation.definition.parameters.sii"
+                },
+                "2": {
+                    "name": "storage.modifier.sii"
+                },
+                "3": {
+                    "name": "punctuation.definition.parameters.sii"
+                },
+                "4": {
+                    "name": "constant.numeric.sii"
+                },
+                "5": {
+                    "name": "punctuation.definition.parameters.sii"
+                },
+                "6": {
+                    "name": "punctuation.definition.parameters.sii"
+                },
+                "7": {
+                    "name": "storage.modifier.sii"
+                },
+                "8": {
+                    "name": "punctuation.definition.parameters.sii"
+                },
+                "9": {
+                    "name": "constant.numeric.sii"
+                }
+            }, 
+            "end": "$|(?=(\\{|#|//))", 
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.end.sii"
+                }
+            },
+            "patterns": [
+                {
+                    "name": "punctuation.definition.parameters.sii",
+                    "match": "\\."
+                },
+                {
+                    "match": "([\\w_]+)(\\[(\\d*)\\])?",
+                    "captures": {
+                        "1": {
+                            "name": "storage.modifier.sii"
+                        },
+                        "2": {
+                            "name": "punctuation.definition.parameters.sii"
+                        },
+                        "3": {
+                            "name": "constant.numeric.sii"
+                        }
+                    }
+                }
+            ]
+        }, 
+        "string-unquoted": {
+            "name": "string.unquoted.double.sii",
+            "begin": "\\w", 
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.begin.sii"
+                }
+            }, 
+            "end": "$|(?=(\\{|#|//))", 
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.end.sii"
+                }
+            }
+        }, 
+        "object": {
+            "comment": "a SII object", 
+            "begin": "\\{",
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.dictionary.begin.sii"
+                }
+            }, 
+            "end": "\\}",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.dictionary.end.sii"
+                }
+            },
+
+            "patterns": [
+                {
+                    "include": "#include"
+                },
+                {
+                    "include": "#object-name"
+                },
+                {
+                    "include": "#comments"
+                },
+                {
+                	"begin": ":",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.separator.dictionary.key-value.sii"
+                        }
+                    }, 
+                    "end": "$|(?=\\})", 
+                    "patterns": [
+                        {
+                            "comment": "the SII object value", 
+                            "include": "#value"
+                        }, 
+                        {
+                            "include": "#comments"
+                        },
+                        {
+                            "name": "invalid.illegal.expected-dictionary-separator.json", 
+                            "match": "[^\\s]"
+                        }
+                    ]
+                },
+                {
+                    "include": "#object"
+                },
+                {
+                    "name": "invalid.illegal.expected-dictionary-separator.sii", 
+                    "match": "[^\\s\\}]"
+                }
+            ]
+        },
+        "object-name": {
+            "comment": "the SII object key",
+            "match": "(ui)?(::)?([\\w_]+)(\\[(\\d*)\\])?",
+            "captures": {
+                "1": {
+                    "name": "entity.name.function.sii"
+                },
+                "2": {
+                    "name": "punctuation.definition.parameters.sii"
+                },
+                "3": {
+                    "name": "entity.name.function.sii"
+                },
+                "4": {
+                    "name": "punctuation.definition.parameters.sii"
+                },
+                "5": {
+                    "name": "constant.numeric.sii"
+                }
+            }
+        },
+        "value": {
+            "patterns": [
+                {
+                    "include": "#constant"
+                },
+                {
+                    "include": "#string-quoted"
+                },
+                {
+                    "include": "#array"
+                }, 
+                {
+                    "include": "#numeric"
+                },
+                {
+                    "include": "#string-unquoted-dot"
+                },
+                {
+                    "include": "#hexadecimal"
+                },
+                {
+                    "include": "#string-unquoted"
+                },
+                {
+                    "include": "#comments"
+                },
+                {
+                    "include": "#object"
+                }
+            ]
+        }
+    },
+
+	"fileTypes": [
+		"sii",
+        "mat"
+	],
+    "patterns": [
+        {
+            "include": "#object-name"
+        },
+        {
+            "begin": ":",
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.separator.dictionary.key-value.sii"
+                }
+            }, 
+            "end": "$|(?=\\})", 
+            "patterns": [
+                {
+                    "comment": "the SII object value", 
+                    "include": "#value"
+                }, 
+                {
+                    "include": "#comments"
+                },
+                {
+                    "name": "invalid.illegal.expected-dictionary-separator.json", 
+                    "match": "[^\\s]"
+                }
+            ]
+        },
+        {
+            "include": "#object"
+        },
+        {
+            "include": "#comments"
+        }
+    ],
+	"scopeName": "source.sii",
+	"uuid": "bc4a5bb8-2153-45b6-b195-b318324c3d3b",
+	"name": "SCS Software"
+}
