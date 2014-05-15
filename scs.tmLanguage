@@ -334,7 +334,7 @@
 			<key>comment</key>
 			<string>the SII object key</string>
 			<key>match</key>
-			<string>(ui)?(::)?([\w_]+)(\[(\d*)\])?</string>
+			<string>(ui)?(::)?([\w_]+)(\[(\d*)\])?\s*(?=[:])</string>
 		</dict>
 		<key>string-quoted</key>
 		<dict>
